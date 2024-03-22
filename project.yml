@@ -4,7 +4,7 @@ description: NVIDIA FLARE sample project yaml file
 
 participants:
   # change example.com to the FQDN of the server
-  - name: ip-10-0-11-18.ap-southeast-1.compute.internal
+  - name: 54.254.202.6
     type: server
     org: nvidia
     fed_learn_port: 8004
@@ -59,7 +59,7 @@ builders:
         # 
         overseer_exists: false
         args:
-          sp_end_point: ip-10-0-11-18.ap-southeast-1.compute.internal:8004:8005
+          sp_end_point: 54.254.202.6:8004:8005
 
   - path: nvflare.lighter.impl.cert.CertBuilder
   - path: nvflare.lighter.impl.signature.SignatureBuilder

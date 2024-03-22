@@ -1,17 +1,17 @@
 {
-    "data_path": "/home/ubuntu/joel/Setup_Dataset//HIGGS.csv",
+    "data_path": "/home/ubuntu/joel//Test.csv",
     "data_index": {
         "valid": {
             "start": 0,
-            "end": 200000
+            "end": 2
         },
         "site-1": {
-            "start": 200000,
-            "end": 600000
+            "start": 2,
+            "end": 6
         },
         "site-2": {
-            "start": 600000,
-            "end": 1000000
+            "start": 6,
+            "end": 10
         }
     }
 }
