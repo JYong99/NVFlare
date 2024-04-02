@@ -18,3 +18,6 @@ When the 'User Name:' prompt appears, typed in the admin's name located in the U
 
 step 7:
 Run the command 'submit_job /home/ubuntu/xgboost_train_CL', path provided in the UN008_user_inputs.txt file
+
+step 8:
+Observe the 'xgboost_model_after_CL.json' file to see an increase to 30 trees for the model

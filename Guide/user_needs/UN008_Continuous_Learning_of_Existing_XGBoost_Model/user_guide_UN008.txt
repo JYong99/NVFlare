@@ -24,7 +24,8 @@ You can refer to the template 'xgboost_train_CL' provided.
   With an existing XGBoost model available in Json format, move it under the server folder in the job folder.
   Example Path: /xgboost_train_CL/app_server
 
-  An example XGBoost model, 'xgboost_model.json' is provided in the template.
+  An example XGBoost model, 'example_xgboost_model.json' is provided in the template under the app_server folder where 
+  it contains 20 trees from previously trained.
 
 2. Submit job folder
 
@@ -38,4 +39,7 @@ You can refer to the template 'xgboost_train_CL' provided.
 
   This time the server will take any existing model located in the job folder and conduct continuous learning for
   XGBoost, so the number of trees in the existing model will increase instead of training a new model.
+
+  An example XGBoost model, 'example_xgboost_model_after_CL.json' is provided that shows the number of trees increases
+  to 30 after performing an additional 5 rounds of training for a total of 2 clients.
 --------------------------------------------------------------------------------------------------------

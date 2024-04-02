@@ -126,45 +126,41 @@ def main():
 
     global_model_as_dict = None
     auc = 0.5
+    x = 0
     while flare.is_running():
         # (3) receives FLModel from NVFlare
         input_model = flare.receive()
         global_params = input_model.params
         curr_round = input_model.current_round
-
-        print(f"current_round={curr_round}")
+        
+        # (5) update model based on global updates
         if curr_round == 0:
-            # (4) first round, no global model
-            model = xgb.train(
-                xgb_params,
-                dmat_train,
-                num_boost_round=1,
-                evals=[(dmat_train, "train"), (dmat_test, "test")],
-            )
-            config = model.save_config()
+            model = xgb.Booster()
+            model_updates = [global_params["model_data"]]
         else:
-            # (5) update model based on global updates
             model_updates = global_params["model_data"]
-            for update in model_updates:
-                global_model_as_dict = update_model(global_model_as_dict, json.loads(update))
-            loadable_model = bytearray(json.dumps(global_model_as_dict), "utf-8")
-            # load model
-            model.load_model(loadable_model)
-            model.load_config(config)
+            
+        for update in model_updates:
+            with open(f"input_model{x}.txt", "w") as file:
+                file.write(str(input_model))
+            global_model_as_dict = update_model(global_model_as_dict, json.loads(update))
+        loadable_model = bytearray(json.dumps(global_model_as_dict), "utf-8")
+        # load model
+        model.load_model(loadable_model)
+    
+        # (6) evaluate model
+        auc = evaluate_model(x_test, model, y_test)
+        # Print the results
+        print(f"{site_name}: global model AUC: {auc:.5f}")
 
-            # (6) evaluate model
-            auc = evaluate_model(x_test, model, y_test)
-            # Print the results
-            print(f"{site_name}: global model AUC: {auc:.5f}")
-
-            # train model in two steps
-            # first, eval on train and test
-            eval_results = model.eval_set(
-                evals=[(dmat_train, "train"), (dmat_test, "test")], iteration=model.num_boosted_rounds() - 1
-            )
-            print(eval_results)
-            # second, train for one round
-            model.update(dmat_train, model.num_boosted_rounds())
+        # train model in two steps
+        # first, eval on train and test
+        eval_results = model.eval_set(
+            evals=[(dmat_train, "train"), (dmat_test, "test")], iteration=model.num_boosted_rounds() - 1
+        )
+        print(eval_results)
+        # second, train for one round
+        model.update(dmat_train, model.num_boosted_rounds())
 
         # (7) construct trained FL model
         # Extract newly added tree using xgboost_bagging slicing api
